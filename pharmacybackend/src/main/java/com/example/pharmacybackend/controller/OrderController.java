@@ -19,15 +19,14 @@ public class OrderController {
 
     private final OrderService orderService;
     private final CurrentUserService currentUserService;
-    private final PharmacyRepository pharmacyRepository;
+   // private final PharmacyRepository pharmacyRepository;
 
     public OrderController(OrderService orderService,
-                           CurrentUserService currentUserService,
-                           PharmacyRepository pharmacyRepository) {
+                           CurrentUserService currentUserService) {
         this.orderService = orderService;
         this.currentUserService = currentUserService;
-        this.pharmacyRepository = pharmacyRepository;
     }
+
 
     // existing create
     @PostMapping("/orders/create")
@@ -62,7 +61,6 @@ public class OrderController {
         return orderService.listForCustomer(customerId, status, page, size);
     }
 
-    // NEW: update order status
     @PatchMapping("/orders/{orderId}/status")
     @PreAuthorize("hasRole('PHARMACY') or hasRole('ADMIN')")
     public OrderSummaryDTO updateStatus(@PathVariable Long orderId,
@@ -70,27 +68,27 @@ public class OrderController {
 
         User current = currentUserService.getCurrentUser();
 
-        // If pharmacy role -> must own the order's pharmacy
+        // PHARMACY users: must have pharmacy assigned
         if (current.getRole() == Role.PHARMACY) {
-            Pharmacy pharmacy = pharmacyRepository.findByOwnerId(current.getId())
-                    .orElseThrow(() -> new NotFoundException("Pharmacy not found for current user"));
 
-            // We need to ensure the order belongs to this pharmacy.
-            // We'll fetch the order summary after update attempt? Better: block before update.
-            // So we do a safe update in service, but check ownership first by reading order id.
-            // We'll reuse service list result after update, but we need ownership check now.
-            // simplest: call service update only after confirming ownership using a lightweight fetch:
-            // We'll confirm using pharmacyOrders list approach is heavy; so add repository in service if needed.
-            // Here: simplest approach - let service update and then verify result pharmacyId.
-            // But better: move ownership check into service. now we do a strict check by updating then verifying:
+            Pharmacy pharmacy = current.getPharmacy();
+            if (pharmacy == null) {
+                throw new NotFoundException("No pharmacy assigned to this account. Contact admin.");
+            }
+
+            // Update order
             OrderSummaryDTO updated = orderService.updateStatus(orderId, req);
+
+            // Security check: order must belong to this pharmacy
             if (!pharmacy.getId().equals(updated.getPharmacyId())) {
                 throw new ForbiddenException("Forbidden");
             }
+
             return updated;
         }
 
-        // ADMIN can update any
+        // ADMIN can update any order
         return orderService.updateStatus(orderId, req);
     }
+
 }

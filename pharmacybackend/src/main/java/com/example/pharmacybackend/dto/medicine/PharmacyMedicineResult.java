@@ -6,6 +6,7 @@ public class PharmacyMedicineResult {
     private String address;
     private Double distanceKm;
     private Long stockId;
+    private String pharmacyPhone;
     private String medicineName;
     private Long medicineId;
     private Integer quantity;
@@ -43,5 +44,13 @@ public class PharmacyMedicineResult {
 
     public void setMedicineId(Long medicineId) {
         this.medicineId = medicineId;
+    }
+
+    public String getPharmacyPhone() {
+        return pharmacyPhone;
+    }
+
+    public void setPharmacyPhone(String pharmacyPhone) {
+        this.pharmacyPhone = pharmacyPhone;
     }
 }

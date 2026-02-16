@@ -1,31 +1,12 @@
-package com.example.pharmacybackend.entity;
+package com.example.pharmacybackend.dto.admin;
 
-import jakarta.persistence.*;
-
-@Entity
-public class Pharmacy {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PharmacyDTO {
     private Long id;
-
-    @Column(nullable = false)
     private String name;
-
-    @Column(columnDefinition = "TEXT")
     private String address;
-
     private String phone;
-
     private Double latitude;
     private Double longitude;
-
-    // ✅ CHANGED: optional=true so admin can create pharmacy without owner
-    @OneToOne(optional = true)
-    @JoinColumn(name = "owner_id")
-    private User owner;
-
-    public Pharmacy() {}
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -36,17 +17,12 @@ public class Pharmacy {
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
     public Double getLatitude() { return latitude; }
     public void setLatitude(Double latitude) { this.latitude = latitude; }
 
     public Double getLongitude() { return longitude; }
     public void setLongitude(Double longitude) { this.longitude = longitude; }
-
-    public User getOwner() { return owner; }
-    public void setOwner(User owner) { this.owner = owner; }
-
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-
 }
-

@@ -1,35 +1,15 @@
-package com.example.pharmacybackend.dto.auth;
+package com.example.pharmacybackend.dto.admin;
 
-import com.example.pharmacybackend.entity.Role;
-import com.example.pharmacybackend.entity.UserStatus;
-
-public class UserResponse {
-
+public class UserDTO {
     private Long id;
     private String username;
     private String name;
     private String email;
     private String phone;
-    private Role role;
-    private UserStatus status;
-
+    private String role;
+    private String status;
     private Long pharmacyId;
     private String pharmacyName;
-
-    public UserResponse() {}
-
-    public UserResponse(Long id, String username, String name, String email, String phone,
-                        Role role, UserStatus status, Long pharmacyId, String pharmacyName) {
-        this.id = id;
-        this.username = username;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.role = role;
-        this.status = status;
-        this.pharmacyId = pharmacyId;
-        this.pharmacyName = pharmacyName;
-    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -46,15 +26,17 @@ public class UserResponse {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    public UserStatus getStatus() { return status; }
-    public void setStatus(UserStatus status) { this.status = status; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
     public Long getPharmacyId() { return pharmacyId; }
     public void setPharmacyId(Long pharmacyId) { this.pharmacyId = pharmacyId; }
 
     public String getPharmacyName() { return pharmacyName; }
     public void setPharmacyName(String pharmacyName) { this.pharmacyName = pharmacyName; }
+
 }
+

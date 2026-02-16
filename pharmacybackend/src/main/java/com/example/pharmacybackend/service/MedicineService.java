@@ -97,6 +97,7 @@ public class MedicineService {
         r.setPharmacyId(p.getId());
         r.setPharmacyName(p.getName());
         r.setAddress(p.getAddress());
+        r.setPharmacyPhone(p.getPhone());
         r.setDistanceKm(distance);
 
         r.setStockId(ps.getId());

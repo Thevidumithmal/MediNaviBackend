@@ -1,0 +1,8 @@
+package com.example.pharmacybackend.dto.admin.request;
+
+public class ChangePasswordRequest {
+    private String newPassword;
+    public String getNewPassword() { return newPassword; }
+    public void setNewPassword(String newPassword) { this.newPassword = newPassword; }
+}
+

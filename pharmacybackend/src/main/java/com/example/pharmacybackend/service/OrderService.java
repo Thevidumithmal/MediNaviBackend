@@ -180,6 +180,8 @@ public class OrderService {
 
         dto.setPharmacyId(o.getPharmacy().getId());
         dto.setPharmacyName(o.getPharmacy().getName());
+        dto.setPharmacyPhone(o.getPharmacy().getPhone());
+
 
         dto.setStatus(o.getStatus());
         dto.setStatusMessage(o.getStatusMessage());
