@@ -28,7 +28,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**").permitAll()
 
-                // ✅ PUBLIC endpoints (needed for AI + customer search page)
+                // PUBLIC endpoints (needed for AI + customer search page)
                 .requestMatchers("/medicines/names").permitAll()
                 .requestMatchers("/medicines/search").permitAll()
 

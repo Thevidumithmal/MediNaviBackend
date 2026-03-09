@@ -23,7 +23,7 @@ public class MedicineService {
 
     public List<PharmacyMedicineResult> search(String name, Double lat, Double lon) {
 
-        // ✅ FIX 1: FETCH ONLY STOCK > 0
+        //  FETCH ONLY STOCK > 0
         List<PharmacyStock> matches =
                 stockRepo.searchByMedicineNameWithStock(name);
 
