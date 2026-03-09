@@ -16,6 +16,9 @@ public class RegisterRequest {
     private String address;
     private Double latitude;
     private Double longitude;
+    private String username;
+    private String phone;
+
 
     public RegisterRequest() {}
 
@@ -42,5 +45,21 @@ public class RegisterRequest {
 
     public Double getLongitude() { return longitude; }
     public void setLongitude(Double longitude) { this.longitude = longitude; }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 }
 

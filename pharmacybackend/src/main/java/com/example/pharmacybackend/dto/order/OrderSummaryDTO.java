@@ -13,6 +13,7 @@ public class OrderSummaryDTO {
 
     private Long pharmacyId;
     private String pharmacyName;
+    private String pharmacyPhone;
 
     private OrderStatus status;
     private String statusMessage;
@@ -39,6 +40,14 @@ public class OrderSummaryDTO {
 
     public String getPharmacyName() { return pharmacyName; }
     public void setPharmacyName(String pharmacyName) { this.pharmacyName = pharmacyName; }
+
+    public String getPharmacyPhone() {
+        return pharmacyPhone;
+    }
+
+    public void setPharmacyPhone(String pharmacyPhone) {
+        this.pharmacyPhone = pharmacyPhone;
+    }
 
     public OrderStatus getStatus() { return status; }
     public void setStatus(OrderStatus status) { this.status = status; }

@@ -50,22 +50,36 @@ public class InvoiceService {
     @Transactional
     public InvoiceDTO createInvoice(CreateInvoiceRequest req) {
 
-        if (req.getPharmacyId() == null) throw new BadRequestException("pharmacyId required");
         if (req.getCashierName() == null || req.getCashierName().trim().isEmpty())
             throw new BadRequestException("cashierName required");
         if (req.getItems() == null || req.getItems().isEmpty())
             throw new BadRequestException("items required");
 
         User current = currentUserService.getCurrentUser();
+
+        // ✅ Determine pharmacy safely
+        Pharmacy pharmacy;
+
         if (current.getRole() == Role.PHARMACY) {
-            Pharmacy my = pharmacyRepo.findByOwnerId(current.getId())
-                    .orElseThrow(() -> new NotFoundException("Pharmacy not found for current user"));
-            if (!my.getId().equals(req.getPharmacyId())) throw new ForbiddenException("Forbidden");
+
+            pharmacy = current.getPharmacy();
+            if (pharmacy == null) {
+                throw new NotFoundException("No pharmacy assigned to this account. Contact admin.");
+            }
+
+            // ✅ Ignore req.getPharmacyId() completely for pharmacy users (prevents Forbidden mismatch)
+
+        } else if (current.getRole() == Role.ADMIN) {
+
+            if (req.getPharmacyId() == null) throw new BadRequestException("pharmacyId required");
+            pharmacy = pharmacyRepo.findById(req.getPharmacyId())
+                    .orElseThrow(() -> new NotFoundException("Pharmacy not found: " + req.getPharmacyId()));
+
+        } else {
+            throw new ForbiddenException("Forbidden");
         }
 
-        Pharmacy pharmacy = pharmacyRepo.findById(req.getPharmacyId())
-                .orElseThrow(() -> new NotFoundException("Pharmacy not found"));
-
+        // --- continue with same logic ---
         Invoice invoice = new Invoice();
         invoice.setPharmacy(pharmacy);
         invoice.setCashierName(req.getCashierName().trim());
@@ -130,6 +144,7 @@ public class InvoiceService {
         saved = invoiceRepo.save(saved);
         return toInvoiceDTO(saved);
     }
+
 
     // ------------------------------------------------------------------
     // LIST INVOICES (Invoice History Page)
@@ -212,11 +227,18 @@ public class InvoiceService {
         if (current.getRole() == Role.ADMIN) return;
 
         if (current.getRole() == Role.PHARMACY) {
-            Pharmacy my = pharmacyRepo.findByOwnerId(current.getId())
-                    .orElseThrow(() -> new NotFoundException("Pharmacy not found"));
-            if (!my.getId().equals(pharmacyId)) throw new ForbiddenException("Forbidden");
+
+            Pharmacy my = current.getPharmacy();
+            if (my == null) {
+                throw new NotFoundException("No pharmacy assigned to this account. Contact admin.");
+            }
+
+            if (!my.getId().equals(pharmacyId)) {
+                throw new ForbiddenException("Forbidden");
+            }
             return;
         }
+
 
         throw new ForbiddenException("Forbidden");
     }
